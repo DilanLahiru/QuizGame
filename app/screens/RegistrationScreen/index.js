@@ -1,5 +1,5 @@
 import {SafeAreaView, TouchableOpacity} from 'react-native';
-import {Stack, Text, Heading, HStack, Input, Button} from 'native-base';
+import {Stack, Text, Input} from 'native-base';
 import React, {useLayoutEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {SCREEN_WIDTH, SCREEN_HEIGHT} from '../../components/theme/index';
@@ -11,8 +11,6 @@ import Toast from 'react-native-toast-message';
 
 const RegistrationScreen = () => {
   const navigation = useNavigation();
-  //const [featuredCategories, setFeaturedCategories] = useState([]);
-  const [show, setShow] = useState(false);
   const [name, setName] = useState('');
   const [emailAddress, setEmailAddress] = useState('');
   const [password, setPassword] = useState('');

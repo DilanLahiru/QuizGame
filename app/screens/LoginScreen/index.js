@@ -1,21 +1,21 @@
 import {SafeAreaView, TouchableOpacity} from 'react-native';
-import {Stack, Text, Heading, HStack, Input, Button} from 'native-base';
+import {Stack, Text, Input} from 'native-base';
 import React, {useLayoutEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
+import {useDispatch} from 'react-redux';
 import {SCREEN_WIDTH, SCREEN_HEIGHT} from '../../components/theme/index';
 import Toast from 'react-native-toast-message';
 import {styles} from './style';
 import LottieView from 'lottie-react-native';
 import {loginActionService} from './service/index';
 import {storeAccessToken, storeLoginUserData} from '../../utils/localStorage';
+import {setLoginUserData} from '../../reducer/LoginReducer';
 
 const LoginScreen = () => {
   const navigation = useNavigation();
-  //const [featuredCategories, setFeaturedCategories] = useState([]);
-  const [show, setShow] = useState(false);
+  const dispatch = useDispatch();
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -32,13 +32,11 @@ const LoginScreen = () => {
   };
 
   const userLogin = async () => {
-    console.log('Aaaaaaaaaaa');
     let obj = {
       username: userName,
       password: password,
     };
     const response = await loginActionService(obj);
-    console.log(response);
     if (response === undefined) {
       Toast.show({
         type: 'error',
@@ -54,6 +52,7 @@ const LoginScreen = () => {
       });
       storeAccessToken(response.data.id);
       storeLoginUserData(response.data);
+      dispatch(setLoginUserData(response.data.user));
       setTimeout(() => {
         navigation.navigate('dashboard');
       }, 1000);

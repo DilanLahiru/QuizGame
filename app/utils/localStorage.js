@@ -38,3 +38,14 @@ export const storeLoginUserData = value => {
     }
   });
 };
+
+export const clearLocalStorage = async () => {
+  return new Promise(async (res, reject) => {
+    try {
+      const value = await AsyncStorage.clear();
+      res(value);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};

@@ -1,17 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {SafeAreaView, TouchableOpacity} from 'react-native';
-import {Stack, Text, Heading, HStack, Input, Image, Button} from 'native-base';
+import {Stack, Text, Image} from 'native-base';
 import React, {useEffect, useState, useLayoutEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {SCREEN_WIDTH, SCREEN_HEIGHT} from '../../components/theme/index';
 import {selectGameType} from '../../reducer/GameReducer';
-import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
 import {styles} from './style';
 import back from '../../assets/icons/roundedBack.png';
 import {setGame} from '../../reducer/GameReducer';
-
 import {GameOver} from '../../components/modal/GameOver';
+
+import {loadQuestions} from './service/index';
 
 // ** Interval Id;
 let interval;
@@ -20,7 +20,6 @@ const GameScreen = () => {
   const navigation = useNavigation();
   const gameSelectType = useSelector(selectGameType);
   const dispatch = useDispatch();
-  //const [featuredCategories, setFeaturedCategories] = useState([]);
   const [quest, setQuest] = useState('');
   const [solution, setSolution] = useState(-1);
   const [answers, setAnswers] = useState([]);
@@ -37,8 +36,6 @@ const GameScreen = () => {
   });
 
   useEffect(() => {
-    console.log('GAME TYPE');
-    console.log(gameSelectType);
     if (gameSelectType.gameLevel === 'EASY') {
       setSeconds(360);
     } else if (gameSelectType.gameLevel === 'MEDIUM') {
@@ -53,8 +50,6 @@ const GameScreen = () => {
   const countDown = () => {
     interval = setInterval(() => {
       setSeconds(prevSeconds => prevSeconds - 1);
-      console.log('calling');
-      console.log(seconds);
     }, 1000);
   };
 
@@ -63,7 +58,6 @@ const GameScreen = () => {
       clearInterval(interval);
       setScoreValue();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [seconds]);
 
   useEffect(() => {
@@ -73,19 +67,13 @@ const GameScreen = () => {
   const setScoreValue = () => {
     dispatch(
       setGame({
+        gameLevel: gameSelectType.gameLevel,
         gameScore: answerCount,
       }),
     );
     setScanModalOpen({
       show: true,
     });
-  };
-
-  const newgame = () => {
-    //clearInterval(interval);
-    startup();
-    setSeconds(60);
-    countDown();
   };
 
   const compare = () => Math.random() - 0.5;
@@ -95,10 +83,7 @@ const GameScreen = () => {
     for (let i = 0; i < 3; i++) {
       randomNumbers.push(Math.floor(Math.random() * 20) + 1);
     }
-    // const parsed = JSON.parse(data);
-    // console.log(parsed);
     await setQuest(data.question);
-    console.log(data);
     setSolution(data.solution);
     randomNumbers.push(data.solution);
     let arr = randomNumbers.sort(compare);
@@ -106,11 +91,7 @@ const GameScreen = () => {
   };
 
   const fetchText = async () => {
-    const response = await axios.get(
-      'https://marcconrad.com/uob/smile/api.php',
-    );
-    console.log('RESPONSE---------');
-    console.log(response);
+    const response = await loadQuestions();
     startQuest(response.data);
   };
 
@@ -133,8 +114,8 @@ const GameScreen = () => {
     const minutes = Math.floor(time / 60)
       .toString()
       .padStart(2, '0');
-    const seconds = (time % 60).toString().padStart(2, '0');
-    return `${minutes}:${seconds}`;
+    const second = (time % 60).toString().padStart(2, '0');
+    return `${minutes}:${second}`;
   };
 
   return (
@@ -152,12 +133,9 @@ const GameScreen = () => {
           <Image
             marginLeft={10}
             source={back}
-            //width={45}
-            //height={45}
             width={SCREEN_WIDTH * 0.1}
             height={SCREEN_HEIGHT * 0.06}
             alt="no results"
-            //resizeMode="contain"
           />
         </Stack>
         <Stack style={styles.bodyView}>

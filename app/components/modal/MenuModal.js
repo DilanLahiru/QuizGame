@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import {SCREEN_WIDTH, SCREEN_HEIGHT} from '../theme/index';
 import {styles} from './style';
 import {useDispatch} from 'react-redux';
-import {setGame} from '../../reducer/GameReducer';
+import {setGame, setGameDifficulty} from '../../reducer/GameReducer';
 
 export function MenuModal(props) {
   const {show, onClose, onHide, navigation} = props;
@@ -24,6 +24,7 @@ export function MenuModal(props) {
     dispatch(
       setGame({
         gameLevel: gameType,
+        gameScore: 0,
       }),
     );
     navigation.navigate('game');

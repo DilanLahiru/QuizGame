@@ -42,11 +42,23 @@ export function GameOver(props) {
 
   const saveGameData = async () => {
     console.log('Aaaaaaaaaaa');
+    console.log(gameData);
+    console.log('GAME TYPE');
+    console.log(gameData.gameLevel);
     let obj = {
       score: gameData.gameScore,
-      movement: 3,
+      movement:
+        gameData.gameLevel === 'EASY'
+          ? 1
+          : gameData.gameLevel === 'MEDIUM'
+          ? 2
+          : gameData.gameLevel === 'HARD'
+          ? 3
+          : 0,
       client_score_id: userData.userId,
     };
+    console.log('OBJ');
+    console.log(obj);
     const response = await saveGameScoreData(obj);
     console.log(response);
     if (response === undefined) {

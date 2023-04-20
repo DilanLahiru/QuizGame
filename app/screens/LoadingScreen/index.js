@@ -1,8 +1,7 @@
 import {SafeAreaView} from 'react-native';
-import {Stack, Text, Heading, HStack, Input} from 'native-base';
+import {Stack, Text} from 'native-base';
 import React, {useEffect, useLayoutEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {SCREEN_WIDTH, SCREEN_HEIGHT} from '../../components/theme/index';
 import {styles} from './style';
 import LottieView from 'lottie-react-native';
 import {getAccessToken} from '../../utils/localStorage';
@@ -23,7 +22,6 @@ const LoadingScreen = () => {
 
   const getToken = async () => {
     const response = await getAccessToken('userToken');
-    console.log(response);
     if (response) {
       setTimeout(() => {
         navigation.navigate('dashboard');

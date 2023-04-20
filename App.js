@@ -10,6 +10,8 @@ import LoginScreen from './app/screens/LoginScreen';
 import RegistrationScreen from './app/screens/RegistrationScreen';
 import DashboardScreen from './app/screens/DashboardScreen';
 import GameScreen from './app/screens/GameScreen';
+import MyScoreScreen from './app/screens/MyScoreScreen';
+import LeaderBoardScreen from './app/screens/LeaderBoardScreen';
 import ProfileScreen from './app/screens/ProfileScreen';
 import {Provider} from 'react-redux';
 import {store} from './store';
@@ -68,6 +70,9 @@ const App = () => {
             <Stack.Screen name="registration" component={RegistrationScreen} />
             <Stack.Screen name="dashboard" component={DashboardScreen} />
             <Stack.Screen name="game" component={GameScreen} />
+            <Stack.Screen name="myScore" component={MyScoreScreen} />
+            <Stack.Screen name="leaderBoard" component={LeaderBoardScreen} />
+            <Stack.Screen name="profile" component={ProfileScreen} />
           </Stack.Navigator>
           <Toast config={toastConfig} ref={ref => Toast.setRef(ref)} />
         </NativeBaseProvider>

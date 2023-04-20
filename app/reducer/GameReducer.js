@@ -2,7 +2,7 @@ import {createSlice} from '@reduxjs/toolkit';
 
 const initialState = {
   game: {
-    gameLevel: '',
+    gameLevel: null,
     gameScore: null,
   },
 };

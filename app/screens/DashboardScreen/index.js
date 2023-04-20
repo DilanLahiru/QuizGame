@@ -1,5 +1,5 @@
 import {SafeAreaView, TouchableOpacity} from 'react-native';
-import {Stack, Text, Heading, HStack, Input, Image} from 'native-base';
+import {Stack, Text, Image} from 'native-base';
 import React, {useEffect, useLayoutEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {SCREEN_WIDTH, SCREEN_HEIGHT} from '../../components/theme/index';
@@ -12,19 +12,36 @@ import profile from '../../assets/icons/user.png';
 import logout from '../../assets/icons/logout.png';
 
 import {MenuModal} from '../../components/modal/MenuModal';
+import {getAccessToken, clearLocalStorage} from '../../utils/localStorage';
 
 const DashboardScreen = () => {
   const navigation = useNavigation();
-  //const [featuredCategories, setFeaturedCategories] = useState([]);
   const [scanModalOpen, setScanModalOpen] = useState({
     show: false,
   });
+
+  const [loginUserData, setLoginUserData] = useState({});
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
     });
   });
+
+  useEffect(() => {
+    getUserToken();
+  }, []);
+
+  const getUserToken = async () => {
+    const data = await getAccessToken('userData');
+    setLoginUserData(data.user);
+  };
+
+  const logOutUser = async () => {
+    const data = await clearLocalStorage();
+    console.log(data);
+    navigation.navigate('loading');
+  };
 
   return (
     <SafeAreaView style={styles.safeView}>
@@ -42,7 +59,7 @@ const DashboardScreen = () => {
           </Stack>
           <Stack style={styles.headTxtView}>
             <Text fontSize={'2xl'} fontWeight={800} color={'#fff'}>
-              HI DILAN,
+              HI {loginUserData.name}
             </Text>
             <Text fontSize={'lg'} fontWeight={600} color={'#fff'}>
               WELCOME BACK
@@ -55,18 +72,14 @@ const DashboardScreen = () => {
               setScanModalOpen({
                 show: true,
               });
-              //navigation.navigate('game');
             }}>
             <Stack style={styles.cardView}>
               <Stack style={styles.cardIcon}>
                 <Image
                   source={Play}
-                  //width={45}
-                  //height={45}
                   width={SCREEN_WIDTH * 0.1}
                   height={SCREEN_HEIGHT * 0.06}
                   alt="no results"
-                  //resizeMode="contain"
                 />
               </Stack>
               <Text fontSize={'xl'} fontWeight={600} color={'#fff'}>
@@ -75,17 +88,17 @@ const DashboardScreen = () => {
             </Stack>
           </TouchableOpacity>
           {/* ------------------------------------------- */}
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('leaderBoard');
+            }}>
             <Stack style={styles.cardView}>
               <Stack style={styles.cardIcon}>
                 <Image
                   source={LeaderBoad}
-                  //width={45}
-                  //height={45}
                   width={SCREEN_WIDTH * 0.1}
                   height={SCREEN_HEIGHT * 0.06}
                   alt="no results"
-                  //resizeMode="contain"
                 />
               </Stack>
               <Text fontSize={'xl'} fontWeight={600} color={'#fff'}>
@@ -94,17 +107,17 @@ const DashboardScreen = () => {
             </Stack>
           </TouchableOpacity>
           {/* ------------------------------------------- */}
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('myScore');
+            }}>
             <Stack style={styles.cardView}>
               <Stack style={styles.cardIcon}>
                 <Image
                   source={history}
-                  // width={43}
-                  // height={43}
                   width={SCREEN_WIDTH * 0.1}
                   height={SCREEN_HEIGHT * 0.06}
                   alt="no results"
-                  //resizeMode="contain"
                 />
               </Stack>
               <Text fontSize={'xl'} fontWeight={600} color={'#fff'}>
@@ -113,17 +126,17 @@ const DashboardScreen = () => {
             </Stack>
           </TouchableOpacity>
           {/* ------------------------------------------- */}
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('profile');
+            }}>
             <Stack style={styles.cardView}>
               <Stack style={styles.cardIcon}>
                 <Image
                   source={profile}
-                  //width={45}
-                  //height={45}
                   width={SCREEN_WIDTH * 0.12}
                   height={SCREEN_HEIGHT * 0.06}
                   alt="no results"
-                  //resizeMode="contain"
                 />
               </Stack>
               <Text fontSize={'xl'} fontWeight={600} color={'#fff'}>
@@ -132,17 +145,17 @@ const DashboardScreen = () => {
             </Stack>
           </TouchableOpacity>
           {/* ------------------------------------------- */}
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              logOutUser();
+            }}>
             <Stack style={styles.cardView}>
               <Stack style={styles.cardIcon}>
                 <Image
                   source={logout}
-                  // width={43}
-                  // height={43}
                   width={SCREEN_WIDTH * 0.12}
                   height={SCREEN_HEIGHT * 0.06}
                   alt="no results"
-                  //resizeMode="contain"
                 />
               </Stack>
               <Text fontSize={'xl'} fontWeight={600} color={'#fff'}>
